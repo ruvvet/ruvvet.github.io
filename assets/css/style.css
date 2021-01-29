@@ -208,8 +208,8 @@ h1, h2, h3, h4, h5, h6 {
 #hero {
   width: 100%;
   height: 100vh;
-  background: url("../img/hero-bg-1.png") top center;
-  background-size: contain;
+  background: url("../img/full-hero-bg.jpg") center center;
+  background-size: cover;
   background-repeat: no-repeat;
 
 }
@@ -229,8 +229,6 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   z-index: 2;
   min-width: 300px;
-  right: 10%;
-
 }
 
 #hero h1 {
