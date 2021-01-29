@@ -1126,9 +1126,6 @@ background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
   }
 
-
-
-
 .download-btn {
   position: relative;
   font-size: 16px;
@@ -1136,4 +1133,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', end
   padding: 5px 15px;
   display: inline;
   font-weight: 600;
+}
+
+.pfp{
+  filter: grayscale(100%);
 }
