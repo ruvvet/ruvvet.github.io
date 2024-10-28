@@ -42,7 +42,7 @@
   <header id="header">
     <div class="d-flex flex-column">
       <div class="profile">
-        <img src="assets/img/pfp2.png" alt="" class="img-fluid rounded-circle pfp" />
+        <img src="assets/img/pfp3.jpg" alt="" class="img-fluid rounded-circle pfp" />
         <h1 class="text-light"><a href="index.html">Jenny Feng</a></h1>
         <div class="social-links mt-3 text-center">
           <a href="https://github.com/ruvvet" class="github" target="_blank"><i class="bx bxl-github"></i></a>
@@ -118,10 +118,10 @@
 
         <div class="row">
           <div class="col-lg-4" data-aos="fade-right">
-            <img src="assets/img/pfp.png" class="img-fluid" alt="" />
+            <img src="assets/img/pfp3.jpg" class="img-fluid" alt="" />
           </div>
           <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-            <h3>Basic Info</h3>
+            <h3>Info</h3>
             <p></p>
             <ul>
               <li>
@@ -144,12 +144,17 @@
               </li>
               <li>
                 <i class="icofont-rounded-right"></i>
-                <strong> Recent Education:</strong> Master of Science in Information Science @ UNC-CH, BA in
-                Biology/Economics @ Duke University
-              </li>
-              <li>
-                <i class="icofont-rounded-right"></i>
                 <strong> Recent Work:</strong> Software Engineer II @ ImageQuix
+              <li>
+                <div class="about-multi-line">
+                  <i class="icofont-rounded-right"></i>
+                  <strong> Education:</strong>
+                  <div><span>Master of Science in Information Science @ UNC-CH,</span>
+                    <span>BA in
+                      Biology/Economics @ Duke University</span>
+                  </div>
+                </div>
+              </li>
               </li>
             </ul>
           </div>
@@ -231,7 +236,7 @@
         </div>
         <div class="skills-container">
           <div class="skills-content" data-aos="fade-up">
-            <div class="progress-test">
+            <div class="skill">
               <span>Languages</span>
               <ul class="">
                 <li>
@@ -248,12 +253,12 @@
                 </li>
               </ul>
             </div>
-            <div class="progress-test">
+            <div class="skill">
               <span>BE</span>
               <ul class="">
                 <li>
                   <i class="icofont-rounded-right"></i>
-                  Express, NestJS
+                  Express, NestJS, Flask
                 </li>
                 <li>
                   <i class="icofont-rounded-right"></i>
@@ -261,7 +266,7 @@
                 </li>
               </ul>
             </div>
-            <div class="progress-test">
+            <div class="skill">
               <span>FE Frameworks</span>
               <ul class="">
                 <li>
@@ -274,7 +279,7 @@
                 </li>
               </ul>
             </div>
-            <div class="progress-test">
+            <div class="skill">
               <span>Database</span>
               <ul class="">
                 <li>
@@ -291,7 +296,7 @@
                 </li>
               </ul>
             </div>
-            <div class="progress-test">
+            <div class="skill">
               <span>Testing Frameworks</span>
               <ul class="">
                 <li>
@@ -306,7 +311,7 @@
             </div>
           </div>
           <div class="skills-content" data-aos="fade-up">
-            <div class="progress-test">
+            <div class="skill">
               <span>Cloud Services/Infra</span>
               <ul class="">
                 <li>
@@ -335,7 +340,7 @@
                 </li>
               </ul>
             </div>
-            <div class="progress-test">
+            <div class="skill">
               <span>CI/CD</span>
               <ul class="">
                 <li>
@@ -348,24 +353,17 @@
                 </li>
               </ul>
             </div>
-            <div class="progress-test">
-              <span>Observability/Tools</span>
+            <div class="skill">
+              <span>Observability</span>
               <ul class="">
                 <li>
                   <i class="icofont-rounded-right"></i>
                   New Relic, PerconaDB, AWS Cloudwatch
                 </li>
-                <li>
-                  <i class="icofont-rounded-right"></i>
-                  Docker
-                </li>
-                <li>
-                  <i class="icofont-rounded-right"></i>
-                  Datagrip
-                </li>
+
               </ul>
             </div>
-            <div class="progress-test">
+            <div class="skill">
               <span>Tools/Everything Else</span>
               <ul class="">
                 <li>
@@ -375,6 +373,18 @@
                 <li>
                   <i class="icofont-rounded-right"></i>
                   Jira
+                </li>
+                <li>
+                  <i class="icofont-rounded-right"></i>
+                  Docker
+                </li>
+                <li>
+                  <i class="icofont-rounded-right"></i>
+                  Datagrip
+                </li>
+                <li>
+                  <i class="icofont-rounded-right"></i>
+                  VSCode
                 </li>
                 <li>
                   <i class="icofont-rounded-right"></i>
@@ -401,8 +411,9 @@
         </div>
 
         <div class="row">
+
           <div class="col-lg-6" data-aos="fade-up">
-            <h3 class="resume-title">Summary</h3>
+            <h3 class="resume-title">About</h3>
             <div class="resume-item pb-0">
               <h4>Jenny Feng</h4>
               <p>
@@ -416,8 +427,10 @@
               </ul>
             </div>
 
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
             <h3 class="resume-title">Education</h3>
-            <div class="resume-item">
+            <!-- <div class="resume-item">
               <h4>Software Engineering Immersive Program</h4>
               <h5>Oct 2020 - Jan 2021</h5>
               <p><em>General Assembly</em></p>
@@ -426,7 +439,7 @@
                 program and Published 4 keystone projects individually and
                 collaboratively that demonstrated core skills.
               </p>
-            </div>
+            </div> -->
             <div class="resume-item">
               <h4>Master of Science in Information Science</h4>
               <h5>Graduation: 2018</h5>
@@ -438,11 +451,156 @@
               <p><em>Duke University</em></p>
             </div>
           </div>
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+
+          <div class="col-lg-6 resume-skills" data-aos="fade-up">
+            <h3 class="resume-title">Skills</h3>
+            <div class="resume-item">
+              <h4>Languages</h4>
+              <ul>
+                <li>Javascript</li>
+                <li>Typescript</li>
+                <li>Python</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>BE</h4>
+              <ul>
+                <li>Express</li>
+                <li>NestJS</li>
+                <li>Node</li>
+                <li>Flask</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>FE</h4>
+              <ul>
+                <li>React</li>
+                <li>Electron</li>
+                <li>NextJS</li>
+                <li>Django</li>
+                <li>HTML/CSS</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>DB/DBMS/ORM</h4>
+              <ul>
+                <li>PostgresSQL</li>
+                <li>MySQL</li>
+                <li>TypeORM</li>
+                <li>Prisma</li>
+                <li>Sequelize</li>
+                <li>MongoDB</li>
+                <li>Mongoose</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Testing</h4>
+              <ul>
+                <li>Playwright</li>
+                <li>Jest</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>CI/CD</h4>
+              <ul>
+                <li>Bitbucket Pipelines</li>
+                <li>Jenkins</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>AWS/Cloud/Infra</h4>
+              <ul>
+                <li>AWS ECS</li>
+                <li>AWS ECR</li>
+                <li>AWS EC2</li>
+                <li>AWS Fargate</li>
+                <li>AWS S3</li>
+                <li>AWS RDS</li>
+                <li>AWS Lambda</li>
+                <li>AWS Cloudfront</li>
+                <li>AWS SNS</li>
+                <li>AWS SQS</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Observability</h4>
+              <ul>
+                <li>New Relic</li>
+                <li>Percona DB</li>
+                <li>Cloudwatch</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Tools</h4>
+              <ul>
+                <li>Git</li>
+                <li>Jira</li>
+                <li>Bitbucket</li>
+                <li>Github</li>
+                <li>Docker</li>
+                <li>Datagrip</li>
+                <li>VSCode</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Information Science</h4>
+              <ul>
+                <li>Data Analysis + Data Modeling</li>
+                <li>Predictive Machine Learning</li>
+                <li>Real-Time Analysis + Summarization</li>
+                <li>Sentiment Analysis</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Community Management</h4>
+              <ul>
+                <li>Communication</li>
+                <li>Community Sentiment Expert</li>
+                <li>Community Building + Development</li>
+                <li>Campaign creation, management + execution</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-up">
             <h3 class="resume-title">Experience</h3>
+
+            <div class="resume-item">
+              <h4>Software Engineer I + II</h4>
+              <h5>July 2021 - Oct 2024</h5>
+              <p><em>ImageQuix/Captura</em></p>
+              <ul>
+                <li>
+                  Engineer in the development of major features for and maintenance of an industry-leading
+                  high-volume photography workflow app (Electron, React, React-Redux, Node.js, Express,
+                  AWS cloud services)</li>
+                <li>Major contributing developer on new e-commerce platform for both front and backend
+                  services.</li>
+                <li>Frontend examples: Custom image masonry visual for student image galleries with lazy
+                  loading and caching for optimization to drive sales, custom cropping tool for user
+                  customization during shopping flow, checkout user experience, etc. (React, React-Redux)</li>
+                <li>Backend examples: Persistent user sessions with complex authentication structures, checkout
+                  authentication and validation, Stripe payment integration, etc (NestJS, TypeORM, Node.js,
+                  Redis, AWS cloud services)</li>
+                <li>Key developer for a new core image processing microservice and pipeline that incorporates a
+                  seamless migration strategy, moving from an AOT process to a JIT processing pipeline and
+                  microservice that will reduce S3 and lambda execution costs, with pre-caching, monitoring,
+                  and autoscaling to optimize costs and boost resource efficiency (NestJS, Prisma,
+                  Opentelemetry, Prometheus, Fluentbit)</li>
+                <li>Monitor, troubleshoot, and triage for unexpected bugs and fires via observability tools and
+                  logs (New Relic, CloudWatch, PerconaDB)</li>
+                <li>Experience with DevOps in code deployment pipelines for different environments and
+                  apps/services (Bitbucket pipelines, Jenkins, AWS ECS, AWS ECR)</li>
+                <li>Experience with cloud infrastructure management and resource management (Terraform,
+                  AWS cloud services)</li>
+              </ul>
+            </div>
+
+
+
             <div class="resume-item">
               <h4>Associate Technical Consultant</h4>
-              <h5>Mar 2021 - Current</h5>
+              <h5>Mar 2021 - July 2021</h5>
               <p><em>Salesforce</em></p>
               <ul>
                 <li>
@@ -581,43 +739,7 @@
               </p>
             </div>
           </div>
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <h3 class="resume-title">Skills</h3>
 
-            <div class="resume-item">
-              <h4>Programming</h4>
-              <ul class="SE-skills">
-                <li>Javascript, Typescript</li>
-                <li>Python</li>
-                <li>Node</li>
-                <li>Express, Flask</li>
-                <li>SQL: PostgresSQL, MySQL</li>
-                <li>MongoDB</li>
-                <li>ORM: TypeORM, Sequelize, Mongoose</li>
-                <li>Frameworks: React, Django</li>
-                <li>Git</li>
-                <li>HTML/CSS</li>
-              </ul>
-            </div>
-            <div class="resume-item">
-              <h4>Information Science</h4>
-              <ul>
-                <li>Data Analysis + Data Modeling</li>
-                <li>Predictive Machine Learning</li>
-                <li>Real-Time Analysis + Summarization</li>
-                <li>Sentiment Analysis</li>
-              </ul>
-            </div>
-            <div class="resume-item">
-              <h4>Community Management</h4>
-              <ul>
-                <li>Communication</li>
-                <li>Community Sentiment Expert</li>
-                <li>Community Building + Development</li>
-                <li>Campaign creation, management + execution</li>
-              </ul>
-            </div>
-          </div>
         </div>
       </div>
     </section>

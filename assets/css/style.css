@@ -354,6 +354,24 @@ section {
   margin-bottom: 0;
 }
 
+.about li:last-child .about-multi-line{
+  padding-right: 2px;
+  display:flex;
+  flex-direction:row;
+}
+
+.about li:last-child .about-multi-line div{
+  display:flex;
+  flex-direction:column;
+}
+
+.about li:last-child strong{
+  padding-left: 4px;
+  padding-right:4px;
+}
+
+
+
 /*--------------------------------------------------------------
 # Facts
 --------------------------------------------------------------*/
@@ -444,10 +462,14 @@ section {
   background-color: #CF6679;
 }
 
+.skill span {
+  color: #CF6679;
+  font-weight: 800;
+}
+
 .skills-container {
   display: flex;
   flex-direction: column;
-
 }
 
 .skills-content {
@@ -530,9 +552,6 @@ section {
   border: 2px solid #CF6679;
 }
 
-.resume .SE-skills {
-  font-weight: bold;
-}
 
 /*--------------------------------------------------------------
 # Portfolio
