@@ -536,6 +536,21 @@ section {
   padding-bottom: 10px;
 }
 
+.resume .resume-item .resume-skill {
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  list-style-type: none;
+
+}
+
+.resume .resume-item .resume-skill li {
+margin:0 5px 5px 5px;;
+background: #CF667910;
+padding: 10px 5px 10px 5px;
+/* border-radius: 15%; */
+}
+
 .resume .resume-item:last-child {
   padding-bottom: 0;
 }
