@@ -14,6 +14,7 @@ export function Contact() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = event.currentTarget;
     if (!ACCESS_KEY) {
       setStatus('error');
       setErrorMsg('Form is not configured yet — set VITE_WEB3FORMS_KEY to enable submissions.');
@@ -21,7 +22,7 @@ export function Contact() {
     }
     setStatus('submitting');
     setErrorMsg(null);
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     formData.append('access_key', ACCESS_KEY);
     formData.append('subject', 'New message from ruvvet.com');
 
@@ -33,7 +34,7 @@ export function Contact() {
       const data = await res.json();
       if (data.success) {
         setStatus('success');
-        event.currentTarget.reset();
+        form.reset();
       } else {
         setStatus('error');
         setErrorMsg(data.message ?? 'Something went wrong.');
