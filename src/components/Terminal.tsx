@@ -15,7 +15,7 @@ type Ctx = {
 
 type Handler = (args: string[], ctx: Ctx) => Line[] | undefined;
 
-const SECTIONS = ['about', 'skills', 'resume', 'projects', 'portfolio', 'contact'] as const;
+const SECTIONS = ['about', 'skills', 'resume', 'work', 'contact'] as const;
 
 const a = (s: string) => <span className="text-accent">{s}</span>;
 

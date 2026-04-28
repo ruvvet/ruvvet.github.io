@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Briefcase, Code2, FileText, Home, LayoutGrid, Mail, User } from 'lucide-react';
+import { Briefcase, FileText, Home, LayoutGrid, Mail, User } from 'lucide-react';
 
 export type NavItem = {
   id: string;
@@ -12,7 +12,6 @@ export const navItems: NavItem[] = [
   { id: 'about', label: 'About', icon: User },
   { id: 'skills', label: 'Skills', icon: Briefcase },
   { id: 'resume', label: 'Resume', icon: FileText },
-  { id: 'projects', label: 'Projects', icon: Code2 },
-  { id: 'portfolio', label: 'Portfolio', icon: LayoutGrid },
+  { id: 'work', label: 'Work', icon: LayoutGrid },
   { id: 'contact', label: 'Contact', icon: Mail },
 ];
