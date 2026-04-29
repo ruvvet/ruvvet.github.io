@@ -34,9 +34,6 @@ export function Skills() {
       </div>
 
       <div>
-        <h3 className="mb-5 text-xs font-semibold uppercase tracking-[0.22em] text-muted">
-          Also comfortable with
-        </h3>
         <div className="grid gap-x-10 gap-y-8 md:grid-cols-2">
           {comfortableWith.map((group, i) => (
             <motion.div
