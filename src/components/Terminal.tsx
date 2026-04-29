@@ -133,13 +133,26 @@ const WELCOME: HistoryEntry = {
   ],
 };
 
+type WindowState = 'normal' | 'minimized' | 'maximized';
+
 export function Terminal() {
   const [history, setHistory] = useState<HistoryEntry[]>([WELCOME]);
   const [input, setInput] = useState('');
   const [recall, setRecall] = useState<{ list: string[]; idx: number }>({ list: [], idx: -1 });
+  const [windowState, setWindowState] = useState<WindowState>('normal');
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toggle: toggleTheme } = useTheme();
+
+  const handleClose = () => {
+    setHistory([WELCOME]);
+    setInput('');
+    setRecall({ list: [], idx: -1 });
+  };
+  const handleMinimize = () =>
+    setWindowState((s) => (s === 'minimized' ? 'normal' : 'minimized'));
+  const handleMaximize = () =>
+    setWindowState((s) => (s === 'maximized' ? 'normal' : 'maximized'));
 
   const runCommand = (raw: string) => {
     const trimmed = raw.trim();
@@ -216,29 +229,77 @@ export function Terminal() {
     if (el) el.scrollTop = el.scrollHeight;
   }, [history, input]);
 
+  const wrapperStyle: React.CSSProperties =
+    windowState === 'minimized'
+      ? { height: 48, maxHeight: 48, minHeight: 0 }
+      : windowState === 'maximized'
+        ? {
+            width: '100%',
+            height: 'min(80svh, 700px)',
+            maxWidth: '100%',
+            maxHeight: 'min(80svh, 700px)',
+          }
+        : { maxWidth: 'min(42rem, 100%)', maxHeight: 'min(80svh, 700px)', height: 500 };
+
+  const resizeClass = windowState === 'normal' ? 'resize' : '';
+  const minHeightClass = windowState === 'minimized' ? '' : 'min-h-[320px]';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut', delay: 0.15 }}
-      onClick={() => inputRef.current?.focus({ preventScroll: true })}
-      className="relative flex w-full min-h-[320px] min-w-[360px] resize flex-col overflow-hidden rounded-2xl border border-border bg-code-bg shadow-2xl shadow-black/40"
-      style={{ maxWidth: 'min(42rem, 100%)', maxHeight: 'min(80svh, 700px)', height: 500 }}
+      onClick={() => {
+        if (windowState !== 'minimized') {
+          inputRef.current?.focus({ preventScroll: true });
+        }
+      }}
+      className={`relative flex w-full min-w-[360px] flex-col overflow-hidden rounded-2xl border border-border bg-code-bg shadow-2xl shadow-black/40 transition-[height,width,max-width,max-height] duration-200 ${resizeClass} ${minHeightClass}`}
+      style={wrapperStyle}
     >
-      <div className="absolute -inset-px -z-10 rounded-2xl bg-gradient-to-br from-accent/20 via-transparent to-blue-500/15 blur-2xl" />
+      {windowState !== 'minimized' && (
+        <div className="absolute -inset-px -z-10 rounded-2xl bg-gradient-to-br from-accent/20 via-transparent to-blue-500/15 blur-2xl" />
+      )}
 
       <div className="flex items-center gap-2 border-b border-white/5 bg-code-chrome px-4 py-3">
-        <div className="flex gap-1.5">
-          <span className="size-3 rounded-full bg-[#ff5f57]" />
-          <span className="size-3 rounded-full bg-[#febc2e]" />
-          <span className="size-3 rounded-full bg-[#28c840]" />
+        <div className="group/lights flex gap-1.5">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClose();
+            }}
+            aria-label="Clear terminal"
+            title="Clear"
+            className="relative size-3 rounded-full bg-[#ff5f57] transition hover:opacity-90"
+          />
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleMinimize();
+            }}
+            aria-label={windowState === 'minimized' ? 'Restore terminal' : 'Minimize terminal'}
+            title={windowState === 'minimized' ? 'Restore' : 'Minimize'}
+            className="relative size-3 rounded-full bg-[#febc2e] transition hover:opacity-90"
+          />
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleMaximize();
+            }}
+            aria-label={windowState === 'maximized' ? 'Restore terminal' : 'Maximize terminal'}
+            title={windowState === 'maximized' ? 'Restore' : 'Maximize'}
+            className="relative size-3 rounded-full bg-[#28c840] transition hover:opacity-90"
+          />
         </div>
         <span className="ml-3 font-mono text-xs text-syn-comment">jenny@ruvvet — bash</span>
       </div>
 
       <div
         ref={containerRef}
-        className="min-h-0 flex-1 overflow-y-auto px-5 py-5 font-mono text-[13px] leading-7 text-text/90 md:text-sm"
+        className={`min-h-0 flex-1 overflow-y-auto px-5 py-5 font-mono text-[13px] leading-7 text-text/90 md:text-sm ${windowState === 'minimized' ? 'hidden' : ''}`}
       >
         {history.map((entry, i) =>
           entry.kind === 'command' ? (

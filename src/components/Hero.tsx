@@ -10,7 +10,7 @@ export function Hero() {
       className="relative flex min-h-[100svh] items-center bg-bg px-5 py-20 sm:px-10 sm:py-24 md:px-16 lg:px-24"
     >
 
-      <div className="grid w-full max-w-6xl gap-12 xl:grid-cols-[1fr_1.3fr] xl:items-center">
+      <div className="grid w-full max-w-6xl gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] xl:items-center">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -48,7 +48,7 @@ export function Hero() {
           </div>
         </motion.div>
 
-        <div className="hidden xl:flex xl:justify-end">
+        <div className="hidden min-w-0 xl:flex xl:justify-end">
           <Terminal />
         </div>
       </div>
