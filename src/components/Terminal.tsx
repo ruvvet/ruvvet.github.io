@@ -222,7 +222,8 @@ export function Terminal() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut', delay: 0.15 }}
       onClick={() => inputRef.current?.focus({ preventScroll: true })}
-      className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-code-bg shadow-2xl shadow-black/40"
+      className="relative flex w-full min-h-[320px] min-w-[360px] resize flex-col overflow-hidden rounded-2xl border border-border bg-code-bg shadow-2xl shadow-black/40"
+      style={{ maxWidth: 'min(42rem, 100%)', maxHeight: 'min(80svh, 700px)', height: 500 }}
     >
       <div className="absolute -inset-px -z-10 rounded-2xl bg-gradient-to-br from-accent/20 via-transparent to-blue-500/15 blur-2xl" />
 
@@ -237,7 +238,7 @@ export function Terminal() {
 
       <div
         ref={containerRef}
-        className="h-[500px] overflow-y-auto px-5 py-5 font-mono text-[13px] leading-7 text-text/90 md:text-sm"
+        className="min-h-0 flex-1 overflow-y-auto px-5 py-5 font-mono text-[13px] leading-7 text-text/90 md:text-sm"
       >
         {history.map((entry, i) =>
           entry.kind === 'command' ? (

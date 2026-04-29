@@ -133,6 +133,22 @@ html {
   animation: terminal-blink 1s steps(1, end) infinite;
 }
 
+/* Custom resize handle for the terminal — webkit only */
+.resize::-webkit-resizer {
+  background: linear-gradient(
+    135deg,
+    transparent 50%,
+    var(--accent) 50%,
+    var(--accent) 60%,
+    transparent 60%,
+    transparent 70%,
+    var(--accent) 70%,
+    var(--accent) 80%,
+    transparent 80%
+  );
+  border-bottom-right-radius: 12px;
+}
+
 .hero-mesh {
   background:
     radial-gradient(ellipse 80% 60% at 20% 20%, rgba(207, 102, 121, 0.35), transparent 60%),
