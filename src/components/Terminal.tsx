@@ -115,6 +115,28 @@ const ALIASES: Record<string, string> = {
   ls: 'help',
 };
 
+function TerminalLauncher({ onOpen }: { onOpen: () => void }) {
+  return (
+    <motion.button
+      type="button"
+      initial={{ opacity: 0, scale: 0.85 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+      onClick={onOpen}
+      aria-label="Open terminal"
+      className="group inline-flex flex-col items-center gap-3 rounded-xl p-3 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    >
+      <div className="relative flex size-24 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a21] to-[#0f0f14] shadow-xl ring-1 ring-white/10 transition group-hover:scale-[1.05] group-hover:shadow-2xl group-hover:shadow-accent/20">
+        <span className="font-mono text-2xl font-semibold text-[#5fcc7a] [text-shadow:0_0_12px_rgb(95_204_122_/_0.5)]">
+          {'>_'}
+        </span>
+        <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/5 to-transparent" />
+      </div>
+      <span className="text-xs font-medium text-text">Terminal</span>
+    </motion.button>
+  );
+}
+
 function Prompt() {
   return (
     <span className="select-none whitespace-pre">
@@ -134,7 +156,7 @@ const WELCOME: HistoryEntry = {
   ],
 };
 
-type WindowState = 'normal' | 'minimized' | 'maximized';
+type WindowState = 'normal' | 'minimized' | 'maximized' | 'closed';
 
 export function Terminal() {
   const [history, setHistory] = useState<HistoryEntry[]>([WELCOME]);
@@ -149,7 +171,9 @@ export function Terminal() {
     setHistory([WELCOME]);
     setInput('');
     setRecall({ list: [], idx: -1 });
+    setWindowState('closed');
   };
+  const handleOpen = () => setWindowState('normal');
   const handleMinimize = () =>
     setWindowState((s) => (s === 'minimized' ? 'normal' : 'minimized'));
   const handleMaximize = () =>
@@ -229,6 +253,10 @@ export function Terminal() {
     const el = containerRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [history, input]);
+
+  if (windowState === 'closed') {
+    return <TerminalLauncher onOpen={handleOpen} />;
+  }
 
   const wrapperStyle: React.CSSProperties =
     windowState === 'minimized'
