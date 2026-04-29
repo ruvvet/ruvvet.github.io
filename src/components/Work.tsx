@@ -1,14 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  ExternalLink,
+} from 'lucide-react';
 import { workItems, type WorkItem } from '../content/work';
 import { Section } from './Section';
 
 const CARD_SIZE = 320;
 const PEEK_VERTICAL = 64;
-const PEEK_HORIZONTAL = 80;
+const PEEK_HORIZONTAL = 56;
 
-function useIsDesktop(breakpoint = 768) {
+function useIsDesktop(breakpoint = 1024) {
   const [isDesktop, setIsDesktop] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.matchMedia(`(min-width: ${breakpoint}px)`).matches;
@@ -25,54 +31,121 @@ function useIsDesktop(breakpoint = 768) {
 export function Work() {
   const isDesktop = useIsDesktop();
   const [order, setOrder] = useState<string[]>(() => workItems.map((i) => i.id));
-  const scrollerRef = useRef<HTMLDivElement>(null);
 
   const promote = useCallback((id: string) => {
     setOrder((prev) => (prev[0] === id ? prev : [id, ...prev.filter((x) => x !== id)]));
   }, []);
 
-  useEffect(() => {
-    if (isDesktop && scrollerRef.current) {
-      scrollerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-    }
-  }, [order, isDesktop]);
+  const next = useCallback(() => {
+    setOrder((prev) => [...prev.slice(1), prev[0]]);
+  }, []);
+
+  const previous = useCallback(() => {
+    setOrder((prev) => [prev[prev.length - 1], ...prev.slice(0, -1)]);
+  }, []);
 
   return (
     <Section id="work" eyebrow="Side work" title="Things I've built">
       <p className="mb-8 max-w-xl text-sm text-muted">
-        Projects, cosplay, and community work. Click any card to bring it to the top —
-        {isDesktop ? ' scroll horizontally for the rest.' : ' scroll down to peek the rest.'}
+        Projects, prototypes, and community work — click any peeking card to bring it to the front,
+        or use the arrows to flip through.
       </p>
 
       {isDesktop ? (
-        <DesktopCarousel order={order} promote={promote} scrollerRef={scrollerRef} />
+        <DesktopStack order={order} promote={promote} onPrev={previous} onNext={next} />
       ) : (
-        <MobileStack order={order} promote={promote} />
+        <MobileStack order={order} promote={promote} onPrev={previous} onNext={next} />
       )}
     </Section>
   );
 }
 
-function DesktopCarousel({
+function DesktopStack({
   order,
   promote,
-  scrollerRef,
+  onPrev,
+  onNext,
 }: {
   order: string[];
   promote: (id: string) => void;
-  scrollerRef: React.RefObject<HTMLDivElement | null>;
+  onPrev: () => void;
+  onNext: () => void;
 }) {
   const totalWidth = (workItems.length - 1) * PEEK_HORIZONTAL + CARD_SIZE;
   return (
-    <div
-      ref={scrollerRef}
-      className="overflow-x-auto pb-10 pt-4 [scrollbar-color:var(--accent)_transparent] [scrollbar-width:thin]"
-    >
-      <div className="relative" style={{ width: totalWidth, height: CARD_SIZE + 24 }}>
+    <div className="relative">
+      <div className="overflow-x-hidden pt-4 pb-2">
+        <div className="relative" style={{ width: totalWidth, height: CARD_SIZE + 24 }}>
+          {order.map((id, i) => {
+            const item = workItems.find((x) => x.id === id);
+            if (!item) return null;
+            const baseX = i * PEEK_HORIZONTAL;
+            const baseZ = workItems.length - i;
+            return (
+              <motion.article
+                key={id}
+                onClick={() => promote(id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    promote(id);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`${item.title} — click to bring to front`}
+                initial={false}
+                animate={{ x: baseX, y: 0, zIndex: baseZ }}
+                whileHover={{ y: -16, zIndex: 999 }}
+                transition={{ type: 'spring', stiffness: 240, damping: 28 }}
+                className="absolute left-0 top-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/30 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                style={{ width: CARD_SIZE, height: CARD_SIZE, transformOrigin: 'top left' }}
+              >
+                <CardBody item={item} isFront={order[0] === id} />
+              </motion.article>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-2 flex items-center gap-3 text-xs text-muted">
+        <ArrowButton direction="left" onClick={onPrev} />
+        <span className="tabular-nums">
+          {workItems.findIndex((w) => w.id === order[0]) + 1} / {workItems.length}
+        </span>
+        <ArrowButton direction="right" onClick={onNext} />
+      </div>
+    </div>
+  );
+}
+
+function MobileStack({
+  order,
+  promote,
+  onPrev,
+  onNext,
+}: {
+  order: string[];
+  promote: (id: string) => void;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  const totalHeight = (workItems.length - 1) * PEEK_VERTICAL + CARD_SIZE;
+  return (
+    <div className="mx-auto" style={{ maxWidth: CARD_SIZE }}>
+      <div className="mb-3 flex items-center justify-center gap-3 text-xs text-muted">
+        <ArrowButton direction="up" onClick={onPrev} />
+        <span className="tabular-nums">
+          {workItems.findIndex((w) => w.id === order[0]) + 1} / {workItems.length}
+        </span>
+        <ArrowButton direction="down" onClick={onNext} />
+      </div>
+
+      <div className="relative" style={{ height: totalHeight }}>
         {order.map((id, i) => {
           const item = workItems.find((x) => x.id === id);
           if (!item) return null;
-          const baseX = i * PEEK_HORIZONTAL;
+          const baseY = i * PEEK_VERTICAL;
           const baseZ = workItems.length - i;
           return (
             <motion.article
@@ -88,13 +161,13 @@ function DesktopCarousel({
               tabIndex={0}
               aria-label={`${item.title} — click to bring to front`}
               initial={false}
-              animate={{ x: baseX, y: 0, zIndex: baseZ }}
-              whileHover={{ y: -16, zIndex: 999 }}
+              animate={{ y: baseY, zIndex: baseZ }}
+              whileHover={{ y: baseY - 18, zIndex: 999 }}
               transition={{ type: 'spring', stiffness: 240, damping: 28 }}
-              className="absolute left-0 top-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/30 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              style={{ width: CARD_SIZE, height: CARD_SIZE, transformOrigin: 'top left' }}
+              className="absolute inset-x-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/20 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              style={{ height: CARD_SIZE, transformOrigin: 'top center' }}
             >
-              <CardBody item={item} isFront={order[0] === id} />
+              <CardBody item={item} isFront={i === 0} />
             </motion.article>
           );
         })}
@@ -103,46 +176,36 @@ function DesktopCarousel({
   );
 }
 
-function MobileStack({
-  order,
-  promote,
+function ArrowButton({
+  direction,
+  onClick,
 }: {
-  order: string[];
-  promote: (id: string) => void;
+  direction: 'left' | 'right' | 'up' | 'down';
+  onClick: () => void;
 }) {
-  const totalHeight = (workItems.length - 1) * PEEK_VERTICAL + CARD_SIZE;
+  const Icon =
+    direction === 'left'
+      ? ChevronLeft
+      : direction === 'right'
+        ? ChevronRight
+        : direction === 'up'
+          ? ChevronUp
+          : ChevronDown;
+  const labels: Record<typeof direction, string> = {
+    left: 'Previous card',
+    right: 'Next card',
+    up: 'Previous card',
+    down: 'Next card',
+  };
   return (
-    <div className="relative mx-auto" style={{ height: totalHeight, maxWidth: CARD_SIZE }}>
-      {order.map((id, i) => {
-        const item = workItems.find((x) => x.id === id);
-        if (!item) return null;
-        const baseY = i * PEEK_VERTICAL;
-        const baseZ = workItems.length - i;
-        return (
-          <motion.article
-            key={id}
-            onClick={() => promote(id)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                promote(id);
-              }
-            }}
-            role="button"
-            tabIndex={0}
-            aria-label={`${item.title} — click to bring to front`}
-            initial={false}
-            animate={{ y: baseY, zIndex: baseZ }}
-            whileHover={{ y: baseY - 18, zIndex: 999 }}
-            transition={{ type: 'spring', stiffness: 240, damping: 28 }}
-            className="absolute inset-x-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/20 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            style={{ height: CARD_SIZE, transformOrigin: 'top center' }}
-          >
-            <CardBody item={item} isFront={i === 0} />
-          </motion.article>
-        );
-      })}
-    </div>
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={labels[direction]}
+      className="inline-flex size-9 items-center justify-center rounded-full border border-border bg-surface-2 text-muted transition hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    >
+      <Icon size={16} />
+    </button>
   );
 }
 

@@ -80,12 +80,4 @@ export const workItems: WorkItem[] = [
       'Real-time summarization of tweets during esports streams to detect events and generate a live timeline.',
     href: 'https://cdr.lib.unc.edu/concern/masters_papers/j3860b75j',
   },
-  {
-    id: 'ela',
-    title: 'ELA — Community Moment',
-    image: '/img/portfolio/ela-gif.gif',
-    tags: ['Community', 'Rainbow Six Siege', 'Ubisoft'],
-    description: 'A favorite community moment from my Rainbow Six Siege Community Manager years.',
-    href: 'https://twitter.com/ruvvet/status/1205262302414422017',
-  },
 ];
