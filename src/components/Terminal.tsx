@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { Maximize2, Minus, X } from 'lucide-react';
 import { profile } from '../content/profile';
 import { useTheme } from '../hooks/useTheme';
 
@@ -271,8 +272,14 @@ export function Terminal() {
             }}
             aria-label="Clear terminal"
             title="Clear"
-            className="relative size-3 rounded-full bg-[#ff5f57] transition hover:opacity-90"
-          />
+            className="relative inline-flex size-3 items-center justify-center rounded-full bg-[#ff5f57] transition hover:opacity-90"
+          >
+            <X
+              size={8}
+              strokeWidth={3}
+              className="text-black/60 opacity-0 transition group-hover/lights:opacity-100"
+            />
+          </button>
           <button
             type="button"
             onClick={(e) => {
@@ -281,8 +288,14 @@ export function Terminal() {
             }}
             aria-label={windowState === 'minimized' ? 'Restore terminal' : 'Minimize terminal'}
             title={windowState === 'minimized' ? 'Restore' : 'Minimize'}
-            className="relative size-3 rounded-full bg-[#febc2e] transition hover:opacity-90"
-          />
+            className="relative inline-flex size-3 items-center justify-center rounded-full bg-[#febc2e] transition hover:opacity-90"
+          >
+            <Minus
+              size={9}
+              strokeWidth={3}
+              className="text-black/60 opacity-0 transition group-hover/lights:opacity-100"
+            />
+          </button>
           <button
             type="button"
             onClick={(e) => {
@@ -291,8 +304,14 @@ export function Terminal() {
             }}
             aria-label={windowState === 'maximized' ? 'Restore terminal' : 'Maximize terminal'}
             title={windowState === 'maximized' ? 'Restore' : 'Maximize'}
-            className="relative size-3 rounded-full bg-[#28c840] transition hover:opacity-90"
-          />
+            className="relative inline-flex size-3 items-center justify-center rounded-full bg-[#28c840] transition hover:opacity-90"
+          >
+            <Maximize2
+              size={7}
+              strokeWidth={3}
+              className="text-black/60 opacity-0 transition group-hover/lights:opacity-100"
+            />
+          </button>
         </div>
         <span className="ml-3 font-mono text-xs text-syn-comment">jenny@ruvvet — bash</span>
       </div>
