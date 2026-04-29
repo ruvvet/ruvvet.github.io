@@ -6,6 +6,7 @@ import { Section } from './Section';
 
 const CARD_SIZE = 320;
 const PEEK_VERTICAL = 64;
+const PEEK_HORIZONTAL = 80;
 
 function useIsDesktop(breakpoint = 768) {
   const [isDesktop, setIsDesktop] = useState(() => {
@@ -61,20 +62,21 @@ function DesktopCarousel({
   promote: (id: string) => void;
   scrollerRef: React.RefObject<HTMLDivElement | null>;
 }) {
+  const totalWidth = (workItems.length - 1) * PEEK_HORIZONTAL + CARD_SIZE;
   return (
     <div
       ref={scrollerRef}
-      className="-mx-2 overflow-x-auto px-2 pb-6 [scrollbar-color:var(--accent)_transparent] [scrollbar-width:thin]"
+      className="overflow-x-auto pb-10 pt-4 [scrollbar-color:var(--accent)_transparent] [scrollbar-width:thin]"
     >
-      <motion.div layout className="flex gap-5" style={{ width: 'max-content' }}>
-        {order.map((id) => {
+      <div className="relative" style={{ width: totalWidth, height: CARD_SIZE + 24 }}>
+        {order.map((id, i) => {
           const item = workItems.find((x) => x.id === id);
           if (!item) return null;
+          const baseX = i * PEEK_HORIZONTAL;
+          const baseZ = workItems.length - i;
           return (
             <motion.article
               key={id}
-              layout
-              transition={{ type: 'spring', stiffness: 260, damping: 30 }}
               onClick={() => promote(id)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -82,18 +84,21 @@ function DesktopCarousel({
                   promote(id);
                 }
               }}
-              whileHover={{ y: -10 }}
               role="button"
               tabIndex={0}
               aria-label={`${item.title} — click to bring to front`}
-              className="shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/20 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              style={{ width: CARD_SIZE, height: CARD_SIZE }}
+              initial={false}
+              animate={{ x: baseX, y: 0, zIndex: baseZ }}
+              whileHover={{ y: -16, zIndex: 999 }}
+              transition={{ type: 'spring', stiffness: 240, damping: 28 }}
+              className="absolute left-0 top-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/30 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              style={{ width: CARD_SIZE, height: CARD_SIZE, transformOrigin: 'top left' }}
             >
               <CardBody item={item} isFront={order[0] === id} />
             </motion.article>
           );
         })}
-      </motion.div>
+      </div>
     </div>
   );
 }
