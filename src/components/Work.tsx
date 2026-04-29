@@ -1,93 +1,149 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
 import { workItems, type WorkItem } from '../content/work';
 import { Section } from './Section';
 
-const PEEK = 64;
-const CARD_HEIGHT = 320;
+const CARD_SIZE = 320;
+const PEEK_VERTICAL = 64;
+
+function useIsDesktop(breakpoint = 768) {
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia(`(min-width: ${breakpoint}px)`).matches;
+  });
+  useEffect(() => {
+    const mq = window.matchMedia(`(min-width: ${breakpoint}px)`);
+    const handler = () => setIsDesktop(mq.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [breakpoint]);
+  return isDesktop;
+}
 
 export function Work() {
+  const isDesktop = useIsDesktop();
   const [order, setOrder] = useState<string[]>(() => workItems.map((i) => i.id));
+  const scrollerRef = useRef<HTMLDivElement>(null);
 
   const promote = useCallback((id: string) => {
-    setOrder((prev) => {
-      if (prev[0] === id) return prev;
-      return [id, ...prev.filter((x) => x !== id)];
-    });
+    setOrder((prev) => (prev[0] === id ? prev : [id, ...prev.filter((x) => x !== id)]));
   }, []);
 
-  const totalHeight = (workItems.length - 1) * PEEK + CARD_HEIGHT;
+  useEffect(() => {
+    if (isDesktop && scrollerRef.current) {
+      scrollerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  }, [order, isDesktop]);
 
   return (
     <Section id="work" eyebrow="Side work" title="Things I've built">
-      <p className="mb-10 max-w-xl text-sm text-muted">
-        Projects, cosplay, community work — click any card to bring it to the top of the stack.
-        Hover to peek.
+      <p className="mb-8 max-w-xl text-sm text-muted">
+        Projects, cosplay, and community work. Click any card to bring it to the top —
+        {isDesktop ? ' scroll horizontally for the rest.' : ' scroll down to peek the rest.'}
       </p>
 
-      <div className="relative w-full" style={{ height: totalHeight }}>
-        {order.map((id, i) => {
-          const item = workItems.find((x) => x.id === id);
-          if (!item) return null;
-          return (
-            <Card
-              key={id}
-              item={item}
-              stackIndex={i}
-              isFront={i === 0}
-              onPromote={() => promote(id)}
-            />
-          );
-        })}
-      </div>
+      {isDesktop ? (
+        <DesktopCarousel order={order} promote={promote} scrollerRef={scrollerRef} />
+      ) : (
+        <MobileStack order={order} promote={promote} />
+      )}
     </Section>
   );
 }
 
-function Card({
-  item,
-  stackIndex,
-  isFront,
-  onPromote,
+function DesktopCarousel({
+  order,
+  promote,
+  scrollerRef,
 }: {
-  item: WorkItem;
-  stackIndex: number;
-  isFront: boolean;
-  onPromote: () => void;
+  order: string[];
+  promote: (id: string) => void;
+  scrollerRef: React.RefObject<HTMLDivElement | null>;
 }) {
-  const baseY = stackIndex * PEEK;
-  const baseScale = 1 - stackIndex * 0.008;
-  const baseZ = workItems.length - stackIndex;
-
   return (
-    <motion.article
-      onClick={onPromote}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onPromote();
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-label={`${item.title} — click to bring to front`}
-      initial={false}
-      animate={{
-        y: baseY,
-        scale: baseScale,
-        zIndex: baseZ,
-      }}
-      whileHover={{
-        y: baseY - 18,
-        scale: baseScale * 1.015,
-        zIndex: 999,
-      }}
-      transition={{ type: 'spring', stiffness: 240, damping: 28 }}
-      className="absolute inset-x-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/20 outline-none focus-visible:ring-2 focus-visible:ring-accent"
-      style={{ height: CARD_HEIGHT, transformOrigin: 'top center' }}
+    <div
+      ref={scrollerRef}
+      className="-mx-2 overflow-x-auto px-2 pb-6 [scrollbar-color:var(--accent)_transparent] [scrollbar-width:thin]"
     >
-      {/* Image area — top portion */}
+      <motion.div layout className="flex gap-5" style={{ width: 'max-content' }}>
+        {order.map((id) => {
+          const item = workItems.find((x) => x.id === id);
+          if (!item) return null;
+          return (
+            <motion.article
+              key={id}
+              layout
+              transition={{ type: 'spring', stiffness: 260, damping: 30 }}
+              onClick={() => promote(id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  promote(id);
+                }
+              }}
+              whileHover={{ y: -10 }}
+              role="button"
+              tabIndex={0}
+              aria-label={`${item.title} — click to bring to front`}
+              className="shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/20 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              style={{ width: CARD_SIZE, height: CARD_SIZE }}
+            >
+              <CardBody item={item} isFront={order[0] === id} />
+            </motion.article>
+          );
+        })}
+      </motion.div>
+    </div>
+  );
+}
+
+function MobileStack({
+  order,
+  promote,
+}: {
+  order: string[];
+  promote: (id: string) => void;
+}) {
+  const totalHeight = (workItems.length - 1) * PEEK_VERTICAL + CARD_SIZE;
+  return (
+    <div className="relative mx-auto" style={{ height: totalHeight, maxWidth: CARD_SIZE }}>
+      {order.map((id, i) => {
+        const item = workItems.find((x) => x.id === id);
+        if (!item) return null;
+        const baseY = i * PEEK_VERTICAL;
+        const baseZ = workItems.length - i;
+        return (
+          <motion.article
+            key={id}
+            onClick={() => promote(id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                promote(id);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label={`${item.title} — click to bring to front`}
+            initial={false}
+            animate={{ y: baseY, zIndex: baseZ }}
+            whileHover={{ y: baseY - 18, zIndex: 999 }}
+            transition={{ type: 'spring', stiffness: 240, damping: 28 }}
+            className="absolute inset-x-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/20 outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            style={{ height: CARD_SIZE, transformOrigin: 'top center' }}
+          >
+            <CardBody item={item} isFront={i === 0} />
+          </motion.article>
+        );
+      })}
+    </div>
+  );
+}
+
+function CardBody({ item, isFront }: { item: WorkItem; isFront: boolean }) {
+  return (
+    <>
       <div className="relative h-[200px] overflow-hidden bg-surface-2">
         {item.image ? (
           <img
@@ -105,7 +161,6 @@ function Card({
         )}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
 
-        {/* Description shows when card is on top */}
         <motion.div
           initial={false}
           animate={{ opacity: isFront ? 1 : 0 }}
@@ -118,7 +173,6 @@ function Card({
         </motion.div>
       </div>
 
-      {/* Bottom strip — title + tags + link, always visible in peek */}
       <div className="flex h-[120px] flex-col justify-between gap-2 border-t border-border bg-surface px-5 py-3">
         <div className="flex items-start justify-between gap-3">
           <h3 className="text-base font-semibold leading-snug">{item.title}</h3>
@@ -146,6 +200,6 @@ function Card({
           ))}
         </ul>
       </div>
-    </motion.article>
+    </>
   );
 }

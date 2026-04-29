@@ -88,32 +88,4 @@ export const workItems: WorkItem[] = [
     description: 'A favorite community moment from my Rainbow Six Siege Community Manager years.',
     href: 'https://twitter.com/ruvvet/status/1205262302414422017',
   },
-  {
-    id: 'caveira',
-    title: 'Caveira Cosplay',
-    image: '/img/portfolio/cav.jpg',
-    tags: ['Cosplay', 'Rainbow Six Siege'],
-    description: 'Caveira (Rainbow Six Siege) cosplay build.',
-  },
-  {
-    id: 'dokkaebi',
-    title: 'Dokkaebi Cosplay',
-    image: '/img/portfolio/dokk.jpg',
-    tags: ['Cosplay', 'Rainbow Six Siege'],
-    description: 'Dokkaebi (Rainbow Six Siege) cosplay build.',
-  },
-  {
-    id: 'bunnycups',
-    title: 'Bunny Cups',
-    image: '/img/portfolio/bunnycups.jpg',
-    tags: ['Hand-painted', 'Ceramics'],
-    description: 'Hand-painted bunny mug — a side hobby.',
-  },
-  {
-    id: 'panther',
-    title: 'Panther',
-    image: '/img/portfolio/panther.jpg',
-    tags: ['Artwork'],
-    description: 'Panther artwork.',
-  },
 ];
